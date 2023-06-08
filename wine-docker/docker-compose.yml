@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  ko-city-server:
+    image: wine
+    ports:
+      - '23600:23600'
+      - '23601-23699:23601-23699'
+    volumes:
+      - ../KnockoutCityServer:/KnockoutCityServer
