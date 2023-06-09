@@ -6,21 +6,24 @@ RUN mkdir -pm755 /etc/apt/keyrings
 RUN wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
 RUN wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/focal/winehq-focal.sources
 RUN apt-get update
-RUN apt-get install -y winbind
 RUN apt-get install -y wine-staging
 RUN apt-get install -y --install-recommends --assume-yes winehq-staging
+RUN apt-get remove winbind && apt-get install -y winbind
 
 COPY startup.sh /root/startup.sh
 RUN chmod gou+x /root/startup.sh
 
 EXPOSE 23600
-EXPOSE 23601-23699
+# EXPOSE 23601-23699
 
+# CMD ["wine", "--version"]
 CMD ["/root/startup.sh"]
 
-# docker build .
-# docker run --expose=23600-23699 -v `pwd`/../KnockoutCityServer/:/KnockoutCityServer/ wine
+# docker build -t wine .
+# docker-compose up
+# docker run --expose=23600-23699:23600-23699 -v `pwd`/../KnockoutCityServer/:/KnockoutCityServer/ wine
 # fuser -k 23600/tcp
 # docker ps
 # docker kill <ID>
 # docker image prune -a
+# wine --version
