@@ -1,0 +1,41 @@
+version: '2'
+
+services:
+  ko-city-server:
+    image: wine
+    # ports:
+    #   - '23600:23600'
+    #   - '23601-23699:23601-23699'
+    volumes:
+      - ../KnockoutCityServer:/KnockoutCityServer
+    network_mode: "host" # To connect to redis & postgres
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5431:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+  redis:
+    image: docker.io/bitnami/redis:7.0
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - '6380:6379'
+    volumes:
+      - 'redis_data:/bitnami/redis/data'
+
+volumes:
+  db:
+    driver: local
+  redis_data:
+    driver: local
+    # driver_opts:
+    #   o: bind
+    #   type: none
+    #   device: ./redis_data

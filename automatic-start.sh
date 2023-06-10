@@ -31,3 +31,9 @@ if [ -d "KnockoutCityServer/tools" ]; then
 fi
 
 echo "KOC correctly setup. Next Step: Setup Docker Containers"
+
+cd wine-docker
+docker build -t wine .
+cd ../wine-docker
+
+docker-compose -f master-docker-compose.yml up
